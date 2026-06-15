@@ -169,7 +169,7 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const [authed, setAuthed] = useState(() => localStorage.getItem("belton_auth") === "1");
+  const [authed, setAuthed] = useState(() => typeof window !== "undefined" && localStorage.getItem("belton_auth") === "1");
 
   if (!authed) {
     return <LoginPage onLogin={() => setAuthed(true)} />;
