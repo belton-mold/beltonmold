@@ -118,14 +118,16 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+const USERNAME = "belton";
 const PASSWORD = "admin";
 
 function LoginPage({ onLogin }: { onLogin: () => void }) {
+  const [user, setUser] = useState("");
   const [pw, setPw] = useState("");
   const [error, setError] = useState(false);
 
   const handleSubmit = () => {
-    if (pw === PASSWORD) {
+    if (user === USERNAME && pw === PASSWORD) {
       localStorage.setItem("belton_auth", "1");
       onLogin();
     } else {
@@ -146,14 +148,22 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
         </div>
         <div className="space-y-3">
           <input
+            type="text"
+            placeholder="Username"
+            className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            value={user}
+            onChange={(e) => { setUser(e.target.value); setError(false); }}
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          />
+          <input
             type="password"
-            placeholder="กรอก Password"
+            placeholder="Password"
             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             value={pw}
             onChange={(e) => { setPw(e.target.value); setError(false); }}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           />
-          {error && <p className="text-sm text-red-500 text-center">Password ไม่ถูกต้อง</p>}
+          {error && <p className="text-sm text-red-500 text-center">Username หรือ Password ไม่ถูกต้อง</p>}
           <button
             onClick={handleSubmit}
             className="w-full h-10 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -175,8 +185,21 @@ function RootComponent() {
     return <LoginPage onLogin={() => setAuthed(true)} />;
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("belton_auth");
+    setAuthed(false);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
+      <div className="fixed top-3 right-4 z-50">
+        <button
+          onClick={handleLogout}
+          className="text-xs text-muted-foreground hover:text-foreground border border-input rounded-md px-3 py-1.5 bg-background hover:bg-accent transition-colors"
+        >
+          Logout
+        </button>
+      </div>
       <Outlet />
     </QueryClientProvider>
   );
