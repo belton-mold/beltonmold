@@ -4,7 +4,9 @@
   "compatibility_date": "2026-06-12",
   "main": "dist/server/server.js",
   "assets": {
-    "directory": "dist/client"
+    "directory": "dist/client",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
   },
   "observability": {
     "enabled": true
@@ -13,4 +15,3 @@
     "nodejs_compat"
   ]
 }
-
